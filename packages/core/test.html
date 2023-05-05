@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <style>
+      #wrapper {
+        width: 200px;
+        height: 200px;
+        overflow: auto;
+      }
+      .list {
+        width: 300px;
+        margin: 0;
+      }
+      .list li {
+        height: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <ul class="list">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+        <li>11</li>
+        <li>12</li>
+        <li>13</li>
+        <li>14</li>
+        <li>15</li>
+      </ul>
+    </div>
+    <script type="module" src="./dist/index.esm.js"></script>
+    <script type="module">
+      import {VirtualListEngine, ScrollController} from './dist/index.esm.js';
+      const engine = new VirtualListEngine();
+      const controller = new ScrollController();
+      const wrapper = document.getElementById('wrapper');
+      controller.bind({
+        target: wrapper,
+        onScroll: (state) => {
+          console.log(state);
+          console.log(engine.compute(wrapper.clientHeight, 30, 15, 0, state.y));
+        },
+        throttleTime: 150,
+        throttleDistance: 100,
+      });
+    </script>
+  </body>
+</html>

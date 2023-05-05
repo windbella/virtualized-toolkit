@@ -1,0 +1,17 @@
+{
+  "name": "@virtualized-toolkit/core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "dependencies": {
+    "lodash.throttle": "^4.1.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.1.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@types/lodash.throttle": "^4.1.7"
+  }
+}
