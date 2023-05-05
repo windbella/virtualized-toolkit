@@ -54,7 +54,7 @@ class ScrollController {
     }
     this.preState = undefined;
     if (this.handler) {
-      this.target.addEventListener('scroll', this.handler);
+      this.target.addEventListener('scroll', this.handler, {passive: true});
     }
   }
 
