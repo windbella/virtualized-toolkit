@@ -37,15 +37,21 @@
     </div>
     <script type="module" src="./dist/index.esm.js"></script>
     <script type="module">
-      import {VirtualListEngine, ScrollController} from './dist/index.esm.js';
-      const engine = new VirtualListEngine();
+      import {VirtualizedEngine, ScrollController} from './dist/index.esm.js';
+      const engine = new VirtualizedEngine();
       const controller = new ScrollController();
       const wrapper = document.getElementById('wrapper');
       controller.bind({
         target: wrapper,
         onScroll: (state) => {
           console.log(state);
-          console.log(engine.compute(wrapper.clientHeight, 30, 15, 0, state.y));
+          console.log(engine.compute({
+            height: wrapper.clientHeight,
+            itemSize: 30,
+            itemCount: 15,
+            extraRate: 0,
+            y: state.y,
+          }));
         },
         throttleTime: 150,
         throttleDistance: 100,
