@@ -1,25 +1,23 @@
 import {
-  HorizontalVirtualizedOptions,
+  HorizontalVirtualizedEngineOptions,
   HorizontalVirtualizedState,
-  VerticalVirtualizedOptions,
+  VerticalVirtualizedEngineOptions,
   VerticalVirtualizedState,
+  VirtualizedEngineOptions,
+  VirtualizedState,
 } from './types';
 
 class VirtualizedEngine {
   constructor() {
     this.compute = this.compute.bind(this);
-    this.computeFixedVertical = this.computeFixedVertical.bind(this);
-    this.computeVariableVertical = this.computeVariableVertical.bind(this);
-    this.computeFixedHorizontal = this.computeFixedHorizontal.bind(this);
-    this.computeVariableHorizontal = this.computeVariableHorizontal.bind(this);
   }
 
-  compute(options: VerticalVirtualizedOptions): VerticalVirtualizedState;
-  compute(options: HorizontalVirtualizedOptions): HorizontalVirtualizedState;
-
+  compute(options: VerticalVirtualizedEngineOptions): VerticalVirtualizedState;
   compute(
-    options: VerticalVirtualizedOptions | HorizontalVirtualizedOptions,
-  ): VerticalVirtualizedState | HorizontalVirtualizedState {
+    options: HorizontalVirtualizedEngineOptions,
+  ): HorizontalVirtualizedState;
+
+  compute(options: VirtualizedEngineOptions): VirtualizedState {
     if ('height' in options) {
       const {height, itemSize, itemCount, extraRate, y} = options;
       if (Array.isArray(itemSize)) {
@@ -58,10 +56,13 @@ class VirtualizedEngine {
   ) {
     const scrollSize = itemSize * itemCount;
     const extraSize = listSize * extraRate;
-    const leadingSize = Math.max(position - extraSize, 0);
-    const trailingSize = Math.min(position + listSize + extraSize, scrollSize);
-    const offset = Math.floor(leadingSize / itemSize);
-    const limit = Math.ceil(trailingSize / itemSize) - offset;
+    const leadingPosition = Math.max(position - extraSize, 0);
+    const trailingPosition = Math.min(
+      position + listSize + extraSize,
+      scrollSize,
+    );
+    const offset = Math.floor(leadingPosition / itemSize);
+    const limit = Math.ceil(trailingPosition / itemSize) - offset;
     const leading = offset * itemSize;
     const trailing = Math.max(0, itemCount - (offset + limit)) * itemSize;
     return {offset, limit, leading, trailing, scrollSize};
@@ -81,15 +82,15 @@ class VirtualizedEngine {
       scrollSize: 0,
     };
     const extraSize = listSize * extraRate;
-    const leadingSize = position - extraSize;
-    const trailingSize = position + listSize + extraSize;
+    const leadingPosition = position - extraSize;
+    const trailingPosition = position + listSize + extraSize;
     result.scrollSize = itemSizes.reduce((sum, itemSize) => {
-      const itemTop = sum;
-      const itemBottom = sum + itemSize;
-      if (itemBottom < leadingSize) {
+      const itemLeading = sum;
+      const itemTrailing = sum + itemSize;
+      if (itemLeading < leadingPosition) {
         result.offset++;
         result.leading += itemSize;
-      } else if (itemTop <= trailingSize) {
+      } else if (itemTrailing <= trailingPosition) {
         result.limit++;
       } else {
         result.trailing += itemSize;
