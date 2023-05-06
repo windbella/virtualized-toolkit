@@ -28,7 +28,6 @@
     <script type="module" src="./dist/index.esm.js"></script>
     <script type="module">
       import {Virtualized} from './dist/index.esm.js';
-      const virtualized = new Virtualized();
       const scroller = document.querySelector('.scroller');
       const wrapper = document.querySelector('.wrapper');
       const list = document.querySelector('.list');
@@ -41,7 +40,7 @@
         .fill()
         .map((_, index) => ({name: `Item ${index + 1}`, index}));
       const onChange = (state) => {
-        const {offset, limit, top, scrollHeight} = state;
+        const {offset, limit, leading, scrollSize} = state;
         const sliceItems = items.slice(offset, offset + limit);
         const prevItems = {};
         const prependItems = [];
@@ -71,10 +70,10 @@
         });
         cache.prevItems = prevItems;
         cache.offset = offset;
-        wrapper.style.height = `${scrollHeight}px`;
-        list.style.transform = `translate(0, ${top}px)`;
+        wrapper.style.height = `${scrollSize}px`;
+        list.style.transform = `translate(0, ${leading}px)`;
       };
-      virtualized.bind({
+      new Virtualized({
         target: scroller,
         itemSize: 30,
         itemCount: 100,

@@ -1,49 +1,27 @@
-import {
-  HorizontalVirtualizedEngineOptions,
-  HorizontalVirtualizedState,
-  VerticalVirtualizedEngineOptions,
-  VerticalVirtualizedState,
-  VirtualizedEngineOptions,
-  VirtualizedState,
-} from './types';
+import {VirtualizedEngineOptions, VirtualizedState} from './types';
 
 class VirtualizedEngine {
   constructor() {
     this.compute = this.compute.bind(this);
   }
 
-  compute(options: VerticalVirtualizedEngineOptions): VerticalVirtualizedState;
-  compute(
-    options: HorizontalVirtualizedEngineOptions,
-  ): HorizontalVirtualizedState;
-
-  compute(options: VirtualizedEngineOptions): VirtualizedState {
-    if ('height' in options) {
-      const {height, itemSize, itemCount, extraRate, y} = options;
-      if (Array.isArray(itemSize)) {
-        return this.computeVariableVertical(height, itemSize, extraRate, y);
-      } else {
-        return this.computeFixedVertical(
-          height,
-          itemSize,
-          itemCount,
-          extraRate,
-          y,
-        );
-      }
+  compute({
+    listSize,
+    itemSize,
+    itemCount,
+    extraRate,
+    position,
+  }: VirtualizedEngineOptions): VirtualizedState {
+    if (Array.isArray(itemSize)) {
+      return this.computeVariable(listSize, itemSize, extraRate, position);
     } else {
-      const {width, itemSize, itemCount, extraRate, x} = options;
-      if (Array.isArray(itemSize)) {
-        return this.computeVariableHorizontal(width, itemSize, extraRate, x);
-      } else {
-        return this.computeFixedHorizontal(
-          width,
-          itemSize,
-          itemCount,
-          extraRate,
-          x,
-        );
-      }
+      return this.computeFixed(
+        listSize,
+        itemSize,
+        itemCount,
+        extraRate,
+        position,
+      );
     }
   }
 
@@ -98,94 +76,6 @@ class VirtualizedEngine {
       return sum + itemSize;
     }, 0);
     return result;
-  }
-
-  private computeFixedVertical(
-    height: number,
-    itemSize: number,
-    itemCount: number,
-    extraRate: number,
-    y: number,
-  ): VerticalVirtualizedState {
-    const {offset, limit, leading, trailing, scrollSize} = this.computeFixed(
-      height,
-      itemSize,
-      itemCount,
-      extraRate,
-      y,
-    );
-    return {
-      offset,
-      limit,
-      top: leading,
-      bottom: trailing,
-      scrollHeight: scrollSize,
-    };
-  }
-
-  private computeVariableVertical(
-    height: number,
-    itemSizes: number[],
-    extraRate: number,
-    y: number,
-  ): VerticalVirtualizedState {
-    const {offset, limit, leading, trailing, scrollSize} = this.computeVariable(
-      height,
-      itemSizes,
-      extraRate,
-      y,
-    );
-    return {
-      offset,
-      limit,
-      top: leading,
-      bottom: trailing,
-      scrollHeight: scrollSize,
-    };
-  }
-
-  private computeFixedHorizontal(
-    width: number,
-    itemSize: number,
-    itemCount: number,
-    extraRate: number,
-    x: number,
-  ): HorizontalVirtualizedState {
-    const {offset, limit, leading, trailing, scrollSize} = this.computeFixed(
-      width,
-      itemSize,
-      itemCount,
-      extraRate,
-      x,
-    );
-    return {
-      offset,
-      limit,
-      left: leading,
-      right: trailing,
-      scrollWidth: scrollSize,
-    };
-  }
-
-  private computeVariableHorizontal(
-    width: number,
-    itemSizes: number[],
-    extraRate: number,
-    x: number,
-  ): HorizontalVirtualizedState {
-    const {offset, limit, leading, trailing, scrollSize} = this.computeVariable(
-      width,
-      itemSizes,
-      extraRate,
-      x,
-    );
-    return {
-      offset,
-      limit,
-      left: leading,
-      right: trailing,
-      scrollWidth: scrollSize,
-    };
   }
 }
 
