@@ -1,0 +1,23 @@
+{
+  "name": "@virtualized-toolkit/example",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "peerDependencies": {
+    "react": ">= 16.8.0"
+  },
+  "dependencies": {
+    "@virtualized-toolkit/core": "1.0.0",
+    "@virtualized-toolkit/react": "1.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.2",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "private": "true"
+}

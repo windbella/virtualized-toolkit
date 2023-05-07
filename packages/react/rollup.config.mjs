@@ -18,6 +18,7 @@ export default {
       sourcemap: true,
     },
   ],
+  external: ['@virtualized-toolkit/core', 'react'],
   plugins: [
     typescript({
       tsconfig: '../../tsconfig.json',

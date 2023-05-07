@@ -1,10 +1,10 @@
 interface VirtualizedOptions {
-  target: HTMLElement | Window;
+  target: EventTarget;
   itemSize: number | number[];
   itemCount: number;
   extraRate: number;
   throttleTime: number;
-  onChange: (state: VirtualizedState) => void;
+  onChange: VirtualizedChangeEventHandler;
   axis: 'x' | 'y';
 }
 
@@ -24,6 +24,8 @@ interface VirtualizedEngineOptions {
   position: number;
 }
 
+type VirtualizedChangeEventHandler = (state: VirtualizedState) => void;
+
 interface ScrollState {
   width: number;
   height: number;
@@ -36,7 +38,7 @@ interface ScrollState {
 }
 
 interface ScrollOptions {
-  target: HTMLElement | Window;
+  target: EventTarget;
   onScroll: ScrollEventHandler;
   throttleTime: number;
   throttleDistance: number;
@@ -48,7 +50,8 @@ export type {
   VirtualizedOptions,
   VirtualizedState,
   VirtualizedEngineOptions,
+  VirtualizedChangeEventHandler,
   ScrollState,
-  ScrollEventHandler,
   ScrollOptions,
+  ScrollEventHandler,
 };

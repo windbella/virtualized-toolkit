@@ -1,10 +1,10 @@
-export const getElement = (target: Window | HTMLElement) => {
+export const getElement = (target: EventTarget) => {
   return target === window
     ? document.documentElement || document.body
     : (target as HTMLElement);
 };
 
-export const getScroll = (target: Window | HTMLElement) => {
+export const getScroll = (target: EventTarget) => {
   if (target === window) {
     return {
       x: window.scrollX ?? 0,
@@ -18,7 +18,7 @@ export const getScroll = (target: Window | HTMLElement) => {
   }
 };
 
-export const getRect = (target: Window | HTMLElement) => {
+export const getRect = (target: EventTarget) => {
   const element = getElement(target);
   return {
     width: element.clientWidth,
@@ -26,7 +26,7 @@ export const getRect = (target: Window | HTMLElement) => {
   };
 };
 
-export const getMaxScroll = (target: Window | HTMLElement) => {
+export const getMaxScroll = (target: EventTarget) => {
   const element = getElement(target);
   return {
     maxX: element.scrollWidth - element.clientWidth,
@@ -35,7 +35,7 @@ export const getMaxScroll = (target: Window | HTMLElement) => {
 };
 
 export const getThrottleDistance = (
-  target: Window | HTMLElement,
+  target: EventTarget,
   axis: 'x' | 'y',
   extraRate: number,
 ) => {

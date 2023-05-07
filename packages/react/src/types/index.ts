@@ -1,5 +1,5 @@
 interface UseVirtualizedOptions {
-  target: HTMLElement | Window;
+  target: {current: EventTarget | null} | EventTarget;
   itemSize: number | number[];
   itemCount: number;
   extraRate: number;

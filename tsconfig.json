@@ -5,7 +5,9 @@
     "sourceMap": true,
     "moduleResolution": "node",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["ESNext", "DOM"],
+    "jsx": "react-jsx"
   },
   "include": ["packages/*/src/**/*"]
 }
