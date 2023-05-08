@@ -1,13 +1,3 @@
-interface VirtualizedOptions {
-  target: EventTarget;
-  itemSize: number | number[];
-  itemCount: number;
-  extraRate: number;
-  throttleTime: number;
-  onChange: VirtualizedChangeEventHandler;
-  axis: 'x' | 'y';
-}
-
 interface VirtualizedState {
   offset: number;
   limit: number;
@@ -23,8 +13,6 @@ interface VirtualizedEngineOptions {
   extraRate: number;
   position: number;
 }
-
-type VirtualizedChangeEventHandler = (state: VirtualizedState) => void;
 
 interface ScrollState {
   width: number;
@@ -47,10 +35,8 @@ interface ScrollOptions {
 type ScrollEventHandler = (state: ScrollState) => void;
 
 export type {
-  VirtualizedOptions,
   VirtualizedState,
   VirtualizedEngineOptions,
-  VirtualizedChangeEventHandler,
   ScrollState,
   ScrollOptions,
   ScrollEventHandler,

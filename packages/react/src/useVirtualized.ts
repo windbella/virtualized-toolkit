@@ -1,57 +1,103 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
-import {Virtualized, VirtualizedState} from '@virtualized-toolkit/core';
+import {
+  ScrollController,
+  VirtualizedEngine,
+  VirtualizedState,
+  virtualizedUtils,
+} from '@virtualized-toolkit/core';
 import {UseVirtualizedOptions} from './types';
-import {convertOptions, diffOptions, getEventTarget, isRef} from './utils';
+import {getEventTarget, isRef} from './utils';
+import isEqual from 'lodash.isequal';
 
-export function useVirtualized(
-  options: Omit<UseVirtualizedOptions, 'extraRate' | 'throttleTime' | 'axis'> &
-    Partial<UseVirtualizedOptions>,
-): VirtualizedState {
-  const {target, itemCount, itemSize, extraRate, throttleTime, axis} = options;
-  const [state, setState] = useState<VirtualizedState>({
-    offset: 0,
-    limit: 0,
-    leading: 0,
-    trailing: 0,
-    scrollSize: 0,
-  });
-  const prevVirtualizedOptionsRef = useRef<Partial<UseVirtualizedOptions>>({});
-  const virtualizedRef = useRef<Virtualized>({} as Virtualized);
-  const prevScrollSizeRef = useRef(0);
+export function useVirtualized({
+  target,
+  itemCount,
+  itemSize,
+  extraRate = 1,
+  throttleTime = 150,
+  axis = 'y',
+}: Omit<UseVirtualizedOptions, 'extraRate' | 'throttleTime' | 'axis'> &
+  Partial<UseVirtualizedOptions>): VirtualizedState {
+  const [scrollSignal, setScrollSignal] = useState({});
+  const engineRef = useRef<VirtualizedEngine>(
+    null as unknown as VirtualizedEngine,
+  );
+  const controller = useRef<ScrollController>(
+    null as unknown as ScrollController,
+  );
+  const prevStateRef = useRef<VirtualizedState>(
+    null as unknown as VirtualizedState,
+  );
 
   useMemo(() => {
-    virtualizedRef.current = new Virtualized({
-      ...convertOptions(options),
-      onChange(state) {
-        setState(state);
-      },
-    });
-  }, []);
+    if (!engineRef.current) {
+      engineRef.current = new VirtualizedEngine();
+    }
 
-  const scrollSize = useMemo(() => {
-    const prevOptions = prevVirtualizedOptionsRef.current;
-    const newOptions = diffOptions(prevOptions, options);
-    if (newOptions.target && isRef(newOptions.target)) {
-      delete newOptions.target;
+    if (!controller.current) {
+      controller.current = new ScrollController({
+        target: getEventTarget(target),
+        throttleTime: throttleTime,
+        onScroll() {
+          setScrollSignal({});
+        },
+      });
+    } else {
+      if (!isRef(target)) {
+        controller.current.setOptions({
+          target: getEventTarget(target),
+          throttleTime,
+        });
+      }
     }
-    if (Object.keys(newOptions).length > 0) {
-      const {scrollSize} = virtualizedRef.current.setOptions(
-        convertOptions(newOptions),
+  }, [target, throttleTime]);
+
+  const state = useMemo(() => {
+    const eventTarget = getEventTarget(target);
+    const listSize = virtualizedUtils.getListSize(eventTarget, axis);
+    const position = virtualizedUtils.getPosition(eventTarget, axis);
+    const newState = engineRef.current.compute({
+      listSize,
+      itemCount,
+      itemSize,
+      extraRate,
+      position,
+    });
+    if (!isEqual(newState, prevStateRef.current)) {
+      prevStateRef.current = newState;
+      const throttleDistance = virtualizedUtils.getThrottleDistance(
+        eventTarget,
+        axis,
+        extraRate,
       );
-      prevVirtualizedOptionsRef.current = options;
-      prevScrollSizeRef.current = scrollSize;
+      controller.current.setOptions({throttleDistance});
     }
-    return prevScrollSizeRef.current;
-  }, [target, itemCount, itemSize, extraRate, throttleTime, axis]);
+    return prevStateRef.current;
+  }, [
+    scrollSignal,
+    target,
+    itemCount,
+    itemSize,
+    extraRate,
+    throttleTime,
+    axis,
+  ]);
 
   useEffect(() => {
     if (isRef(target)) {
-      virtualizedRef.current.setOptions({target: getEventTarget(target)});
+      controller.current.setOptions({
+        target: getEventTarget(target),
+        throttleTime,
+      });
+      setScrollSignal({});
     }
-  }, [target]);
+  }, [target, throttleTime]);
 
-  return {
-    ...state,
-    scrollSize,
-  };
+  useEffect(() => {
+    return () => {
+      controller.current.dispose();
+    };
+  }, []);
+
+  return state;
 }

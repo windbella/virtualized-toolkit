@@ -46,3 +46,13 @@ export const getThrottleDistance = (
     return (height * extraRate) / 2;
   }
 };
+
+export const getPosition = (target: EventTarget, axis: 'x' | 'y') => {
+  const {x, y} = getScroll(target);
+  return axis === 'x' ? x : y;
+};
+
+export const getListSize = (target: EventTarget, axis: 'x' | 'y') => {
+  const {width, height} = getRect(target);
+  return axis === 'x' ? width : height;
+};

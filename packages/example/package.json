@@ -9,8 +9,8 @@
     "react": ">= 16.8.0"
   },
   "dependencies": {
-    "@virtualized-toolkit/core": "1.0.0",
-    "@virtualized-toolkit/react": "1.0.0"
+    "@virtualized-toolkit/react": "1.0.0",
+    "@virtualized-toolkit/vanilla": "1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.2",

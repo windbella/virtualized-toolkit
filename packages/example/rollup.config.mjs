@@ -6,10 +6,10 @@ import terser from '@rollup/plugin-terser';
 
 export default [
   {
-    input: 'src/core.ts',
+    input: 'src/vanilla.ts',
     output: [
       {
-        file: 'dist/core.js',
+        file: 'dist/vanilla.js',
         format: 'esm',
         sourcemap: true,
       },

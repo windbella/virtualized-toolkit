@@ -1,8 +1,13 @@
 import isEqual from 'lodash.isequal';
-import {ScrollController} from './ScrollController';
-import {VirtualizedEngine} from './VirtualizedEngine';
-import {ScrollState, VirtualizedOptions, VirtualizedState} from './types';
-import {getRect, getScroll, getThrottleDistance} from './utils';
+import {
+  ScrollController,
+  VirtualizedEngine,
+  ScrollState,
+  VirtualizedState,
+  virtualizedUtils,
+} from '@virtualized-toolkit/core';
+import {} from '@virtualized-toolkit/core';
+import {VirtualizedOptions} from './types';
 
 const defaultOptions: VirtualizedOptions = {
   target: window,
@@ -22,7 +27,7 @@ class Virtualized {
     ...defaultOptions,
   };
   private controller = new ScrollController({});
-  private preState?: VirtualizedState = undefined;
+  private preState: VirtualizedState = null as unknown as VirtualizedState;
 
   constructor(options: Partial<VirtualizedOptions>) {
     this.setOptions = this.setOptions.bind(this);
@@ -41,8 +46,8 @@ class Virtualized {
     if (
       options.target ||
       options.throttleTime ||
-      options.axis ||
-      options.extraRate
+      options.extraRate ||
+      options.axis
     ) {
       this.setHandler();
     }
@@ -55,8 +60,8 @@ class Virtualized {
 
   update(): VirtualizedState {
     const {target} = this.options;
-    const {width, height} = getRect(target);
-    const {x, y} = getScroll(target);
+    const {width, height} = virtualizedUtils.getRect(target);
+    const {x, y} = virtualizedUtils.getScroll(target);
     return this.onScroll({
       x,
       y,
@@ -75,23 +80,20 @@ class Virtualized {
     this.controller.setOptions({
       target,
       throttleTime,
-      throttleDistance: getThrottleDistance(target, axis, extraRate),
+      throttleDistance: virtualizedUtils.getThrottleDistance(
+        target,
+        axis,
+        extraRate,
+      ),
       onScroll: this.onScroll,
     });
   }
 
   private onScroll({width, height, x, y}: ScrollState) {
-    const {axis} = this.options;
-    if (axis === 'x') {
-      return this.handleScroll(width, x);
-    } else {
-      return this.handleScroll(height, y);
-    }
-  }
-
-  private handleScroll(listSize: number, position: number) {
     const {target, itemSize, itemCount, extraRate, axis}: VirtualizedOptions =
       this.options;
+    const listSize = axis === 'x' ? width : height;
+    const position = axis === 'x' ? x : y;
     const state = this.engine.compute({
       listSize,
       itemSize,
@@ -99,14 +101,18 @@ class Virtualized {
       extraRate,
       position,
     });
-    this.controller.setOptions({
-      throttleDistance: getThrottleDistance(target, axis, extraRate),
-    });
     if (!isEqual(state, this.preState)) {
-      this.options.onChange(state);
       this.preState = state;
+      this.options.onChange(this.preState);
+      this.controller.setOptions({
+        throttleDistance: virtualizedUtils.getThrottleDistance(
+          target,
+          axis,
+          extraRate,
+        ),
+      });
     }
-    return state;
+    return this.preState;
   }
 }
 

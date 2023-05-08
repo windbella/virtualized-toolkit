@@ -1,7 +1,7 @@
 import {
   Virtualized,
   VirtualizedChangeEventHandler,
-} from '@virtualized-toolkit/core';
+} from '@virtualized-toolkit/vanilla';
 
 const scroller = document.querySelector('.scroller') as HTMLElement;
 const wrapper = document.querySelector('.wrapper') as HTMLElement;
