@@ -6,11 +6,11 @@ import terser from '@rollup/plugin-terser';
 
 export default [
   {
-    input: 'src/vanilla.ts',
+    input: 'src/vanilla/index.ts',
     output: [
       {
         file: 'dist/vanilla.js',
-        format: 'esm',
+        format: 'umd',
         sourcemap: true,
       },
     ],
@@ -24,7 +24,7 @@ export default [
     ],
   },
   {
-    input: 'src/react.tsx',
+    input: 'src/react/index.tsx',
     output: [
       {
         file: 'dist/react.js',
