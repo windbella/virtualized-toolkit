@@ -18,9 +18,14 @@ class ScrollController {
   private preState?: ScrollState;
 
   constructor(options: Partial<ScrollOptions>) {
+    this.getOptions = this.getOptions.bind(this);
     this.setOptions = this.setOptions.bind(this);
     this.dispose = this.dispose.bind(this);
     this.setOptions(options);
+  }
+
+  getOptions(): ScrollOptions {
+    return this.options;
   }
 
   setOptions(options: Partial<ScrollOptions>) {

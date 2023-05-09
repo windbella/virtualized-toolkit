@@ -85,13 +85,23 @@ export function useVirtualized({
 
   useEffect(() => {
     if (isRef(target)) {
-      controller.current.setOptions({
-        target: getEventTarget(target),
-        throttleTime,
-      });
-      setScrollSignal({});
+      const {target: prevEventTarget, throttleTime: prevThrottleTime} =
+        controller.current.getOptions();
+      const eventTarget = getEventTarget(target);
+      if (
+        !isEqual(
+          {target: eventTarget, throttleTime},
+          {target: prevEventTarget, throttleTime: prevThrottleTime},
+        )
+      ) {
+        controller.current.setOptions({
+          target: eventTarget,
+          throttleTime,
+        });
+        setScrollSignal({});
+      }
     }
-  }, [target, throttleTime]);
+  });
 
   useEffect(() => {
     return () => {
