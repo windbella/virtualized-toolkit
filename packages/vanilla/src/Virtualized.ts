@@ -51,18 +51,18 @@ class Virtualized {
     ) {
       this.setHandler();
     }
-    return this.update();
+    this.update();
   }
 
   dispose() {
     this.controller.dispose();
   }
 
-  update(): VirtualizedState {
+  update() {
     const {target} = this.options;
     const {width, height} = virtualizedUtils.getRect(target);
     const {x, y} = virtualizedUtils.getScroll(target);
-    return this.onScroll({
+    this.onScroll({
       x,
       y,
       width,
