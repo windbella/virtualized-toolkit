@@ -19,36 +19,29 @@ export function useVirtualized({
 }: Omit<UseVirtualizedOptions, 'extraRate' | 'throttleTime' | 'axis'> &
   Partial<UseVirtualizedOptions>): VirtualizedState {
   const [scrollSignal, setScrollSignal] = useState({});
-  const engineRef = useRef<VirtualizedEngine>(
-    null as unknown as VirtualizedEngine,
-  );
-  const controller = useRef<ScrollController>(
-    null as unknown as ScrollController,
-  );
   const prevStateRef = useRef<VirtualizedState>(
     null as unknown as VirtualizedState,
   );
 
-  useMemo(() => {
-    if (!engineRef.current) {
-      engineRef.current = new VirtualizedEngine();
-    }
-
-    if (!controller.current) {
-      controller.current = new ScrollController({
+  const {engine, controller} = useMemo(
+    () => ({
+      engine: new VirtualizedEngine(),
+      controller: new ScrollController({
         target: getEventTarget(target),
-        throttleTime: throttleTime,
         onScroll() {
           setScrollSignal({});
         },
+      }),
+    }),
+    [],
+  );
+
+  useMemo(() => {
+    if (!isRef(target)) {
+      controller.setOptions({
+        target: getEventTarget(target),
+        throttleTime,
       });
-    } else {
-      if (!isRef(target)) {
-        controller.current.setOptions({
-          target: getEventTarget(target),
-          throttleTime,
-        });
-      }
     }
   }, [target, throttleTime]);
 
@@ -56,7 +49,7 @@ export function useVirtualized({
     const eventTarget = getEventTarget(target);
     const listSize = virtualizedUtils.getListSize(eventTarget, axis);
     const position = virtualizedUtils.getPosition(eventTarget, axis);
-    const newState = engineRef.current.compute({
+    const newState = engine.compute({
       listSize,
       itemCount,
       itemSize,
@@ -70,7 +63,7 @@ export function useVirtualized({
         axis,
         extraRate,
       );
-      controller.current.setOptions({throttleDistance});
+      controller.setOptions({throttleDistance});
     }
     return prevStateRef.current;
   }, [
@@ -86,7 +79,7 @@ export function useVirtualized({
   useEffect(() => {
     if (isRef(target)) {
       const {target: prevEventTarget, throttleTime: prevThrottleTime} =
-        controller.current.getOptions();
+        controller.getOptions();
       const eventTarget = getEventTarget(target);
       if (
         !isEqual(
@@ -94,7 +87,7 @@ export function useVirtualized({
           {target: prevEventTarget, throttleTime: prevThrottleTime},
         )
       ) {
-        controller.current.setOptions({
+        controller.setOptions({
           target: eventTarget,
           throttleTime,
         });
@@ -105,7 +98,7 @@ export function useVirtualized({
 
   useEffect(() => {
     return () => {
-      controller.current.dispose();
+      controller.dispose();
     };
   }, []);
 
