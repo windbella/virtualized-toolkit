@@ -5,12 +5,10 @@
   "scripts": {
     "build": "rollup -c && vite build"
   },
-  "peerDependencies": {
-    "react": ">= 16.8.0"
-  },
   "dependencies": {
     "@virtualized-toolkit/react": "1.0.0",
-    "@virtualized-toolkit/vanilla": "1.0.0"
+    "@virtualized-toolkit/vanilla": "1.0.0",
+    "@virtualized-toolkit/vue": "1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.2",
