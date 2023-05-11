@@ -6,7 +6,7 @@ import {
   virtualizedUtils,
 } from '@virtualized-toolkit/core';
 import {UseVirtualizedOptions} from './types';
-import {getEventTarget, isRef} from './utils';
+import {getEventTarget} from './utils';
 import isEqual from 'lodash.isequal';
 
 export function useVirtualized({
@@ -35,15 +35,6 @@ export function useVirtualized({
     }),
     [],
   );
-
-  useMemo(() => {
-    if (!isRef(target)) {
-      controller.setOptions({
-        target: getEventTarget(target),
-        throttleTime,
-      });
-    }
-  }, [target, throttleTime]);
 
   const state = useMemo(() => {
     const eventTarget = getEventTarget(target);
@@ -77,22 +68,20 @@ export function useVirtualized({
   ]);
 
   useEffect(() => {
-    if (isRef(target)) {
-      const {target: prevEventTarget, throttleTime: prevThrottleTime} =
-        controller.getOptions();
-      const eventTarget = getEventTarget(target);
-      if (
-        !isEqual(
-          {target: eventTarget, throttleTime},
-          {target: prevEventTarget, throttleTime: prevThrottleTime},
-        )
-      ) {
-        controller.setOptions({
-          target: eventTarget,
-          throttleTime,
-        });
-        setScrollSignal({});
-      }
+    const {target: prevEventTarget, throttleTime: prevThrottleTime} =
+      controller.getOptions();
+    const eventTarget = getEventTarget(target);
+    if (
+      !isEqual(
+        {target: eventTarget, throttleTime},
+        {target: prevEventTarget, throttleTime: prevThrottleTime},
+      )
+    ) {
+      controller.setOptions({
+        target: eventTarget,
+        throttleTime,
+      });
+      setScrollSignal({});
     }
   });
 
