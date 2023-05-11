@@ -1,5 +1,6 @@
 import {
   ScrollController,
+  ScrollState,
   VirtualizedEngine,
   VirtualizedState,
   virtualizedUtils,
@@ -18,40 +19,42 @@ export function useVirtualized({
   axis = 'y',
 }: Omit<UseVirtualizedOptions, 'extraRate' | 'throttleTime' | 'axis'> &
   Partial<UseVirtualizedOptions>): ComputedRef<VirtualizedState> {
-  const scrollSignal = ref({});
   const engine = new VirtualizedEngine();
   const controller = new ScrollController({
     target: getEventTarget(target),
-    onScroll() {
-      scrollSignal.value = {};
+    onScroll(state) {
+      scrollState.value = state;
     },
   });
+  const scrollState = ref<ScrollState>(controller.getScrollState());
   const prevStateRef: {current: VirtualizedState | null} = {current: null};
 
   const state = computed<VirtualizedState>(() => {
-    if (scrollSignal.value) {
-      const eventTarget = getEventTarget(target);
-      const listSize = virtualizedUtils.getListSize(eventTarget, unref(axis));
-      const position = virtualizedUtils.getPosition(eventTarget, unref(axis));
-      const newState = engine.compute({
-        listSize,
-        itemCount: unref(itemCount),
-        itemSize: unref(itemSize),
-        extraRate: unref(extraRate),
-        position,
-      });
-      if (!isEqual(newState, prevStateRef.current)) {
-        prevStateRef.current = newState;
-        const throttleDistance = virtualizedUtils.getThrottleDistance(
-          eventTarget,
-          unref(axis),
-          unref(extraRate),
-        );
-        controller.setOptions({throttleDistance});
-      }
-      return newState;
+    const listSize = virtualizedUtils.getListSize(
+      scrollState.value,
+      unref(axis),
+    );
+    const position = virtualizedUtils.getPosition(
+      scrollState.value,
+      unref(axis),
+    );
+    const newState = engine.compute({
+      listSize,
+      itemCount: unref(itemCount),
+      itemSize: unref(itemSize),
+      extraRate: unref(extraRate),
+      position,
+    });
+    if (!isEqual(newState, prevStateRef.current)) {
+      prevStateRef.current = newState;
+      const throttleDistance = virtualizedUtils.getThrottleDistance(
+        scrollState.value,
+        unref(axis),
+        unref(extraRate),
+      );
+      controller.setOptions({throttleDistance});
     }
-    return null as unknown as VirtualizedState;
+    return newState;
   });
 
   watch(
@@ -62,6 +65,7 @@ export function useVirtualized({
         target,
         throttleTime,
       });
+      scrollState.value = controller.getScrollState();
     },
   );
 

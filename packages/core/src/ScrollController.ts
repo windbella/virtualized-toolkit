@@ -1,9 +1,12 @@
 import {ScrollOptions, ScrollState} from './types';
 import throttle from 'lodash.throttle';
 import {getMaxScroll, getRect, getScroll} from './utils';
+import merge from 'lodash.merge';
+
+const nullElement = document.createElement('div');
 
 const defaultScrollOptions: ScrollOptions = {
-  target: window,
+  target: nullElement,
   onScroll: () => {
     // ignore
   },
@@ -20,6 +23,7 @@ class ScrollController {
   constructor(options: Partial<ScrollOptions>) {
     this.getOptions = this.getOptions.bind(this);
     this.setOptions = this.setOptions.bind(this);
+    this.getScrollState = this.getScrollState.bind(this);
     this.dispose = this.dispose.bind(this);
     this.setOptions(options);
   }
@@ -36,13 +40,14 @@ class ScrollController {
     if (needsSetHandler) {
       this.clearHandler();
     }
-    this.options = {
-      ...this.options,
-      ...options,
-    };
+    this.options = merge(this.options, options);
     if (needsSetHandler) {
       this.setHandler();
     }
+  }
+
+  getScrollState(): ScrollState {
+    return this.compute();
   }
 
   dispose() {

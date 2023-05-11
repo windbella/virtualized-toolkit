@@ -1,3 +1,5 @@
+import {ScrollState} from './types';
+
 export const getElement = (target: EventTarget) => {
   return target === window
     ? document.documentElement || document.body
@@ -35,11 +37,10 @@ export const getMaxScroll = (target: EventTarget) => {
 };
 
 export const getThrottleDistance = (
-  target: EventTarget,
+  {width, height}: ScrollState,
   axis: 'x' | 'y',
   extraRate: number,
 ) => {
-  const {width, height} = getRect(target);
   if (axis === 'x') {
     return (width * extraRate) / 2;
   } else {
@@ -47,12 +48,10 @@ export const getThrottleDistance = (
   }
 };
 
-export const getPosition = (target: EventTarget, axis: 'x' | 'y') => {
-  const {x, y} = getScroll(target);
+export const getPosition = ({x, y}: ScrollState, axis: 'x' | 'y') => {
   return axis === 'x' ? x : y;
 };
 
-export const getListSize = (target: EventTarget, axis: 'x' | 'y') => {
-  const {width, height} = getRect(target);
+export const getListSize = ({width, height}: ScrollState, axis: 'x' | 'y') => {
   return axis === 'x' ? width : height;
 };

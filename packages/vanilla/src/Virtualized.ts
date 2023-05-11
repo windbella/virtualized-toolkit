@@ -8,9 +8,9 @@ import {
 } from '@virtualized-toolkit/core';
 import {} from '@virtualized-toolkit/core';
 import {VirtualizedOptions} from './types';
+import merge from 'lodash.merge';
 
-const defaultOptions: VirtualizedOptions = {
-  target: window,
+const defaultOptions: Omit<VirtualizedOptions, 'target'> = {
   itemSize: 0,
   itemCount: 0,
   onChange: () => {
@@ -22,33 +22,28 @@ const defaultOptions: VirtualizedOptions = {
 };
 
 class Virtualized {
+  private controller = new ScrollController({
+    onScroll: this.onScroll.bind(this),
+  });
   private engine = new VirtualizedEngine();
   private options: VirtualizedOptions = {
+    target: this.controller.getOptions().target,
     ...defaultOptions,
   };
-  private controller = new ScrollController({});
+
   private preState: VirtualizedState = null as unknown as VirtualizedState;
 
   constructor(options: Partial<VirtualizedOptions>) {
     this.setOptions = this.setOptions.bind(this);
     this.dispose = this.dispose.bind(this);
     this.update = this.update.bind(this);
-    this.onScroll = this.onScroll.bind(this);
     this.setOptions(options);
   }
 
   setOptions(options: Partial<VirtualizedOptions>) {
-    this.options = {
-      ...this.options,
-      ...options,
-    };
+    this.options = merge(this.options, options);
 
-    if (
-      options.target ||
-      options.throttleTime ||
-      options.extraRate ||
-      options.axis
-    ) {
+    if (options.target || options.throttleTime) {
       this.setHandler();
     }
     this.update();
@@ -59,38 +54,21 @@ class Virtualized {
   }
 
   update() {
-    const {target} = this.options;
-    const {width, height} = virtualizedUtils.getRect(target);
-    const {x, y} = virtualizedUtils.getScroll(target);
-    this.onScroll({
-      x,
-      y,
-      width,
-      height,
-      isBottom: false,
-      isLeading: false,
-      isTop: false,
-      isTrailing: false,
-    });
+    this.onScroll(this.controller.getScrollState());
   }
 
   private setHandler() {
-    const {target, throttleTime, extraRate, axis} = this.options;
+    const {target, throttleTime} = this.options;
 
     this.controller.setOptions({
       target,
       throttleTime,
-      throttleDistance: virtualizedUtils.getThrottleDistance(
-        target,
-        axis,
-        extraRate,
-      ),
-      onScroll: this.onScroll,
     });
   }
 
-  private onScroll({width, height, x, y}: ScrollState) {
-    const {target, itemSize, itemCount, extraRate, axis}: VirtualizedOptions =
+  private onScroll(scrollState: ScrollState) {
+    const {width, height, x, y} = scrollState;
+    const {itemSize, itemCount, extraRate, axis}: VirtualizedOptions =
       this.options;
     const listSize = axis === 'x' ? width : height;
     const position = axis === 'x' ? x : y;
@@ -106,7 +84,7 @@ class Virtualized {
       this.options.onChange(this.preState);
       this.controller.setOptions({
         throttleDistance: virtualizedUtils.getThrottleDistance(
-          target,
+          scrollState,
           axis,
           extraRate,
         ),
