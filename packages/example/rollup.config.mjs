@@ -9,7 +9,7 @@ export default [
     input: 'src/vanilla/index.ts',
     output: [
       {
-        file: 'dist/vanilla.js',
+        file: 'html/dist/vanilla.js',
         format: 'umd',
         sourcemap: true,
       },
@@ -27,7 +27,7 @@ export default [
     input: 'src/react/index.tsx',
     output: [
       {
-        file: 'dist/react.js',
+        file: 'html/dist/react.js',
         format: 'umd',
         sourcemap: true,
       },

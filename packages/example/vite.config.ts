@@ -10,7 +10,7 @@ export default defineConfig({
       name: 'vue',
       fileName: () => 'vue.js',
     },
-    outDir: resolve(__dirname, 'dist'),
+    outDir: resolve(__dirname, 'html/dist'),
     emptyOutDir: false,
   },
   plugins: [vue()],
