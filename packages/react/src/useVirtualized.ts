@@ -24,6 +24,7 @@ export function useVirtualized({
       engine: new VirtualizedEngine(),
       controller: new ScrollController({
         target: getEventTarget(target),
+        throttleTime,
         onScroll(state) {
           setScrollState(state);
         },
@@ -34,7 +35,7 @@ export function useVirtualized({
   const [scrollState, setScrollState] = useState<ScrollState>(
     controller.getScrollState(),
   );
-  const prevStateRef = useRef<VirtualizedState>(
+  const curStateRef = useRef<VirtualizedState>(
     null as unknown as VirtualizedState,
   );
 
@@ -48,8 +49,8 @@ export function useVirtualized({
       extraRate,
       position,
     });
-    if (!isEqual(newState, prevStateRef.current)) {
-      prevStateRef.current = newState;
+    if (!isEqual(curStateRef.current, newState)) {
+      curStateRef.current = newState;
       const throttleDistance = virtualizedUtils.getThrottleDistance(
         scrollState,
         axis,
@@ -57,17 +58,17 @@ export function useVirtualized({
       );
       controller.setOptions({throttleDistance});
     }
-    return prevStateRef.current;
+    return curStateRef.current;
   }, [scrollState, target, itemCount, itemSize, extraRate, throttleTime, axis]);
 
   useEffect(() => {
-    const {target: prevEventTarget, throttleTime: prevThrottleTime} =
+    const {target: curEventTarget, throttleTime: curThrottleTime} =
       controller.getOptions();
     const eventTarget = getEventTarget(target);
     if (
       !isEqual(
+        {target: curEventTarget, throttleTime: curThrottleTime},
         {target: eventTarget, throttleTime},
-        {target: prevEventTarget, throttleTime: prevThrottleTime},
       )
     ) {
       controller.setOptions({

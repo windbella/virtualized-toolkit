@@ -19,10 +19,6 @@ interface ScrollState {
   height: number;
   x: number;
   y: number;
-  isTop: boolean;
-  isBottom: boolean;
-  isLeading: boolean;
-  isTrailing: boolean;
 }
 
 interface ScrollOptions {

@@ -41,10 +41,11 @@ class Virtualized {
   }
 
   setOptions(options: Partial<VirtualizedOptions>) {
+    const needsSetController = options.target || options.throttleTime;
     this.options = merge(this.options, options);
 
-    if (options.target || options.throttleTime) {
-      this.setHandler();
+    if (needsSetController) {
+      this.setController();
     }
     this.update();
   }
@@ -57,7 +58,7 @@ class Virtualized {
     this.onScroll(this.controller.getScrollState());
   }
 
-  private setHandler() {
+  private setController() {
     const {target, throttleTime} = this.options;
 
     this.controller.setOptions({
