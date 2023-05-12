@@ -1,6 +1,6 @@
 import {ScrollOptions, ScrollState} from './types';
 import throttle from 'lodash.throttle';
-import {getMaxScroll, getRect, getScroll} from './utils';
+import {getRect, getScroll} from './utils';
 import merge from 'lodash.merge';
 
 const nullElement = document.createElement('div');
@@ -44,6 +44,7 @@ class ScrollController {
     if (needsSetHandler) {
       this.setHandler();
     }
+    this.preState = undefined;
   }
 
   getScrollState(): ScrollState {
@@ -61,23 +62,14 @@ class ScrollController {
       height: 0,
       x: 0,
       y: 0,
-      isTop: false,
-      isBottom: false,
-      isLeading: false,
-      isTrailing: false,
     };
     const {target} = this.options;
     const {x, y} = getScroll(target);
     const {width, height} = getRect(target);
-    const {maxX, maxY} = getMaxScroll(target);
     state.x = x;
     state.y = y;
     state.width = width;
     state.height = height;
-    state.isLeading = state.x <= 0;
-    state.isTrailing = Math.abs(maxX - state.x) < 1;
-    state.isTop = state.y <= 0;
-    state.isBottom = Math.abs(maxY - state.y) < 1;
     return state;
   }
 

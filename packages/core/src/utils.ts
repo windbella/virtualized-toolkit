@@ -28,14 +28,6 @@ export const getRect = (target: EventTarget) => {
   };
 };
 
-export const getMaxScroll = (target: EventTarget) => {
-  const element = getElement(target);
-  return {
-    maxX: element.scrollWidth - element.clientWidth,
-    maxY: element.scrollHeight - element.clientHeight,
-  };
-};
-
 export const getThrottleDistance = (
   {width, height}: ScrollState,
   axis: 'x' | 'y',
