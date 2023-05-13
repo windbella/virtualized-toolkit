@@ -31,12 +31,13 @@ class Virtualized {
     ...defaultOptions,
   };
 
-  private preState: VirtualizedState = null as unknown as VirtualizedState;
+  private curState: VirtualizedState = null as unknown as VirtualizedState;
 
   constructor(options: Partial<VirtualizedOptions>) {
     this.setOptions = this.setOptions.bind(this);
-    this.dispose = this.dispose.bind(this);
+    this.getState = this.getState.bind(this);
     this.update = this.update.bind(this);
+    this.dispose = this.dispose.bind(this);
     this.setOptions(options);
   }
 
@@ -50,12 +51,16 @@ class Virtualized {
     this.update();
   }
 
-  dispose() {
-    this.controller.dispose();
+  getState() {
+    return this.curState;
   }
 
   update() {
     this.onScroll(this.controller.getScrollState());
+  }
+
+  dispose() {
+    this.controller.dispose();
   }
 
   private setController() {
@@ -80,9 +85,9 @@ class Virtualized {
       extraRate,
       position,
     });
-    if (!isEqual(state, this.preState)) {
-      this.preState = state;
-      this.options.onChange(this.preState);
+    if (!isEqual(this.curState, state)) {
+      this.curState = state;
+      this.options.onChange(this.curState);
       this.controller.setOptions({
         throttleDistance: virtualizedUtils.getThrottleDistance(
           scrollState,
@@ -91,7 +96,7 @@ class Virtualized {
         ),
       });
     }
-    return this.preState;
+    return this.curState;
   }
 }
 
