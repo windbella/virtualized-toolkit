@@ -12,4 +12,13 @@ interface VirtualizedOptions {
 
 type VirtualizedChangeEventHandler = (state: VirtualizedState) => void;
 
-export {VirtualizedOptions, VirtualizedChangeEventHandler};
+interface SliceRendererOptions<T> {
+  parent: Element;
+  renderer: (item: T, index: number, items: T[]) => Element;
+}
+
+export {
+  VirtualizedOptions,
+  VirtualizedChangeEventHandler,
+  SliceRendererOptions,
+};
