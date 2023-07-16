@@ -1,5 +1,5 @@
 import {createRoot} from 'react-dom/client';
-import {useMemo, useRef} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {useVirtualized} from '@virtualized-toolkit/react';
 
 const items = new Array(100)
@@ -44,5 +44,9 @@ function App() {
 const rootElement = document.getElementById('root');
 if (rootElement) {
   const root = createRoot(rootElement);
-  root.render(<App />);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
 }
