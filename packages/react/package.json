@@ -1,7 +1,7 @@
 {
   "name": "@virtualized-toolkit/react",
   "description": "Virtualized toolkit for react.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
@@ -13,7 +13,7 @@
     "react": ">= 16.8.0"
   },
   "dependencies": {
-    "@virtualized-toolkit/core": "^0.0.5"
+    "@virtualized-toolkit/core": "^0.0.6"
   },
   "devDependencies": {
     "@types/lodash.isequal": "^4.5.6",
