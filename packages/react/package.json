@@ -1,5 +1,6 @@
 {
   "name": "@virtualized-toolkit/react",
+  "description": "Virtualized toolkit for react.",
   "version": "1.0.0",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -19,5 +20,13 @@
     "@types/react": "^18.2.5",
     "lodash.isequal": "^4.5.0",
     "react": "^18.2.0"
+  },
+  "files": [
+    "dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/windbella/virtualized-toolkit",
+    "directory": "packages/react"
   }
 }
