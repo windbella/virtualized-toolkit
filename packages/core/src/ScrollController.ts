@@ -15,6 +15,8 @@ const defaultScrollOptions: ScrollOptions = {
 };
 
 class ScrollController {
+  static nullElement = nullElement;
+
   private bindKey?: object = undefined;
   private handler?: (event: Event) => void;
   private options: ScrollOptions = defaultScrollOptions;
@@ -82,6 +84,7 @@ class ScrollController {
 
   private setHandler() {
     const {target, throttleTime} = this.options;
+    this.bindKey = {};
     const bindKey = this.bindKey;
     this.handler = () => {
       if (bindKey !== this.bindKey) {
