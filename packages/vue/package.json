@@ -1,7 +1,7 @@
 {
   "name": "@virtualized-toolkit/vue",
   "description": "Virtualized toolkit for vue.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
@@ -13,7 +13,7 @@
     "vue": ">= 3.0.0"
   },
   "dependencies": {
-    "@virtualized-toolkit/core": "^0.0.6"
+    "@virtualized-toolkit/core": "^0.0.7"
   },
   "devDependencies": {
     "@types/lodash.isequal": "^4.5.6",

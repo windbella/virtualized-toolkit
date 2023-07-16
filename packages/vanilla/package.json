@@ -1,7 +1,7 @@
 {
   "name": "@virtualized-toolkit/vanilla",
   "description": "Virtualized toolkit.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
@@ -10,7 +10,7 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "@virtualized-toolkit/core": "^0.0.6"
+    "@virtualized-toolkit/core": "^0.0.7"
   },
   "devDependencies": {
     "@types/lodash.isequal": "^4.5.6",
