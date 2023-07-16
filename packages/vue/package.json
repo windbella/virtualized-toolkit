@@ -21,7 +21,8 @@
     "vue": "^3.2.47"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "src/"
   ],
   "repository": {
     "type": "git",

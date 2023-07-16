@@ -20,7 +20,8 @@
     "lodash.throttle": "^4.1.1"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "src/"
   ],
   "repository": {
     "type": "git",

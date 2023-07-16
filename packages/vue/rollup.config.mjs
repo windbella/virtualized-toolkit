@@ -10,10 +10,12 @@ export default {
       file: 'dist/index.cjs.js',
       format: 'cjs',
       exports: 'named',
+      sourcemap: true,
     },
     {
       file: 'dist/index.esm.js',
       format: 'esm',
+      sourcemap: true,
     },
   ],
   external: ['@virtualized-toolkit/core', 'vue'],

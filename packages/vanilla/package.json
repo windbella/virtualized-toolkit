@@ -19,7 +19,8 @@
     "lodash.merge": "^4.6.2"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "src/"
   ],
   "repository": {
     "type": "git",
