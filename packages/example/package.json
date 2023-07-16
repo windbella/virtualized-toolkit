@@ -1,14 +1,14 @@
 {
   "name": "@virtualized-toolkit/example",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c && vite build"
   },
   "dependencies": {
-    "@virtualized-toolkit/react": "^0.0.4",
-    "@virtualized-toolkit/vanilla": "^0.0.4",
-    "@virtualized-toolkit/vue": "^0.0.4"
+    "@virtualized-toolkit/react": "^0.0.5",
+    "@virtualized-toolkit/vanilla": "^0.0.5",
+    "@virtualized-toolkit/vue": "^0.0.5"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.2",
