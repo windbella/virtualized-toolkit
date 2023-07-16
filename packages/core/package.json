@@ -1,6 +1,7 @@
 {
   "name": "@virtualized-toolkit/core",
-  "version": "1.0.0",
+  "description": "Core for virtualized toolkit.",
+  "version": "0.0.7",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
@@ -8,7 +9,6 @@
   "scripts": {
     "build": "rollup -c"
   },
-  "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
@@ -18,5 +18,14 @@
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.2",
     "lodash.throttle": "^4.1.1"
+  },
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/windbella/virtualized-toolkit",
+    "directory": "packages/core"
   }
 }

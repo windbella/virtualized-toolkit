@@ -9,7 +9,7 @@ export const getElement = (target: EventTarget) => {
 export const getScroll = (target: EventTarget) => {
   if (target === window) {
     return {
-      x: window.scrollX ?? 0,
+      x: window.scrollY ?? 0,
       y: window.scrollX ?? 0,
     };
   } else {

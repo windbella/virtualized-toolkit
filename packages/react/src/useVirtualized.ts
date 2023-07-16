@@ -82,6 +82,7 @@ export function useVirtualized({
   useEffect(() => {
     return () => {
       controller.dispose();
+      controller.setOptions({target: ScrollController.nullElement});
     };
   }, []);
 

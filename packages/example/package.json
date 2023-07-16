@@ -1,20 +1,20 @@
 {
   "name": "@virtualized-toolkit/example",
-  "version": "1.0.0",
+  "version": "0.0.7",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c && vite build"
   },
   "dependencies": {
-    "@virtualized-toolkit/react": "1.0.0",
-    "@virtualized-toolkit/vanilla": "1.0.0",
-    "@virtualized-toolkit/vue": "1.0.0"
+    "@virtualized-toolkit/react": "^0.0.7",
+    "@virtualized-toolkit/vanilla": "^0.0.7",
+    "@virtualized-toolkit/vue": "^0.0.7"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.2",
     "@types/node": "^20.1.1",
-    "@types/react": "^18.2.5",
-    "@types/react-dom": "^18.2.4",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-vue": "^4.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
